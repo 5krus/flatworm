@@ -25,12 +25,14 @@ class MiniML:
     def train(self, training_dataset: DataFrame, input_column_names: list,
               target_column_name: str, train_test_ratio: float) -> None:
         """
-        If model already exists continue training (or retrain if continuation not possible) and if model doesn't exist,
-        train from scratch with multi-stage training setup from Data1: i.e. train various models based on dataset,
-        select top 3 and optimise their hyperparameters for better performance. Model is saved to file, not returned.
+        If model already exists continue training (or retrain if continuation
+        not possible) and if model doesn't exist, train from scratch with multi-
+        stage training setup from Data1: i.e. train various models based on
+        dataset, select top 3 and optimise their hyperparameters for better
+        performance. Model is saved to file, not returned.
         Why: Train, improve or retrain models with one function for simplicity.
 
-        Note: The model is always saved to ./models/model_{target_column_name}.pkl
+        Note: Model is always saved to ./models/model_{target_column_name}.pkl
 
         Parameters
         ----------
@@ -45,32 +47,35 @@ class MiniML:
 
         Sample Usage
         ------------
-        import meow                                                  # Ensure class is imported.
-        from pandas import read_csv                                  # (External package to read data from CSV.)
-        ml = meow.ML()                                               # Create instance of class.
-        training_dataset = read_csv("training_dataset.csv")          # Load dataset for training.
-        input_column_names = ["phi_d", "df_d", "j_d", "j"]           # What features (columns) you want to predict with.
-        target_column_name = "eta_is"                                # What component you want predicted.
-        train_test_ratio = 0.8                                       # What data % to dedicate to training (vs testing).
-        ml.train(training_dataset, input_column_names, target_column_name, train_test_ratio)  # Train model.
+        import meow                                          # Ensure class is imported.
+        from pandas import read_csv                          # (External package to read CSVs.)
+        ml = meow.ML()                                       # Create instance of class.
+        training_dataset = read_csv("training_dataset.csv")  # Load dataset for training.
+        input_column_names = ["phi_d", "df_d", "j_d", "j"]   # What features to predict with.
+        target_column_name = "eta_is"                        # What component you want predicted.
+        train_test_ratio = 0.8                               # What data % to dedicate to training.
+        ml.train(training_dataset, input_column_names, target_column_name, train_test_ratio)
         """
 
         try:
             # Find and continue training model (or retrain, if necessary).
             _ = self._find_and_load_model(target_column_name)
-            self._continue_training_model(training_dataset, input_column_names, target_column_name, train_test_ratio)
+            self._continue_training_model(training_dataset, input_column_names, target_column_name,
+                                          train_test_ratio)
 
         except FileNotFoundError:
             # If model not found, train from scratch with multi-stage model training from Data1.
-            self._train_models_in_stages(training_dataset, input_column_names, target_column_name, train_test_ratio)
+            self._train_models_in_stages(training_dataset, input_column_names, target_column_name,
+                                         train_test_ratio)
 
     def predict(self, input_dataset: DataFrame, target_column_name: str) -> ndarray:
         """
-        Predict target value(s) based on input dataset provided, with automated model identification.
-        Why: Allows for quick prediction of values without the hassle of specifying a model and its path.
+        Predict target value(s) based on input data provided, with automated model identification.
+        Why: Allows for quick pred. of values without the hassle of specifying a model and its path.
 
-        Note: This function checks the folder and all directories within the folder its located in for
-        the relevant model. If the model is not located within the above-mentioned path, this function will error.
+        Note: This function checks the folder and all directories within the folder its located in
+        for the relevant model. If the model is not located within the above-mentioned path, this
+        function will error.
 
         Parameters
         ----------
@@ -84,11 +89,11 @@ class MiniML:
         Sample Usage
         ------------
         import meow                                                     # Ensure class is imported.
-        from pandas import read_csv                                     # (External package to read data from CSV.)
+        from pandas import read_csv                                     #(External pkg to read CSV.
         ml = meow.ML()                                                  # Create instance of class.
-        input_dataset = read_csv("input_dataset.csv")                   # Load dataset for prediction.
-        target_column_name = "eta_is"                                   # What component you want predicted.
-        prediction_set = ml.predict(input_dataset, target_column_name)  # Obtain ML prediction, if model exists.
+        input_dataset = read_csv("input_dataset.csv")                   # Load dataset for pred.
+        target_column_name = "eta_is"                                   # Prediction target.
+        prediction_set = ml.predict(input_dataset, target_column_name)  # Try to obtain ML pred.
         """
 
         # Find and load the relevant model based on prediction target.
@@ -105,11 +110,11 @@ class MiniML:
 
     """ Support Methods """
 
-    def _train_models_in_stages(self, dataset: DataFrame, input_column_names: list, target_column_name: str,
-                                ratio: float) -> None:
+    def _train_models_in_stages(self, dataset: DataFrame, input_column_names: list,
+                                target_column_name: str, ratio: float) -> None:
         """
-        Train various models based on dataset, select top 3 and optimise their hyperparameters for better performance.
-        Why: Find the most performant model, and its most performant hyperparameter set, for a given dataset.
+        Train many models based on dataset, select top 3 and optimise them for better performance.
+        Why: Find the most performant model and most performant HyperParam set, for a given dataset.
 
         Parameters
         ----------
@@ -130,8 +135,10 @@ class MiniML:
         # Perform stage 1 of training via a general model search.
         top_three_models = self._stage_1_model_training(dataset, target_column_name, ratio)
 
-        # Perform stage 2 of training via hyperparameter optimisation of 3 most performant models found in stage 1.
-        best_model = self._stage_2_model_training(top_three_models, dataset, target_column_name, ratio)
+        # Perform stage 2 of training via hyperparameter optimisation of 3 most performant models
+        # found in stage 1.
+        best_model = self._stage_2_model_training(top_three_models, dataset, target_column_name,
+                                                  ratio)
 
         # Save the best performing model to file.
         model_directory = './models'
@@ -141,10 +148,12 @@ class MiniML:
         print(f"\nModel {target_column_name} two-stage training complete."
               f"\nBest model ({type(best_model).__name__}) saved to {model_save_path}\n")
 
-    def _stage_1_model_training(self, input_dataset: DataFrame, target_column_name: str, ratio: float):
+    def _stage_1_model_training(self, input_dataset: DataFrame, target_column_name: str,
+                                ratio: float):
         """
         Train multiple models, evaluate their performance and return top performing three,
-        Why: To find out which models perform the best prior to spending large compute on hyperparameter optimisation.
+        Why: To find out which models perform the best prior to spending large compute on
+        hyperparameter optimisation.
 
         Parameters
         ----------
@@ -154,7 +163,8 @@ class MiniML:
 
         Returns
         -------
-        top_three_models : The three models with the lowest MSE score when evaluated against unseen test dataset.
+        top_three_models : The three models with the lowest MSE score when evaluated against unseen
+        test dataset.
         """
 
         # Load relevant libraries, if not already cached.
@@ -181,7 +191,8 @@ class MiniML:
             test_size=1 - ratio,
             random_state=42)
 
-        # Train and evaluate each model with minor hyperparameter tuning to get an idea of what models work well
+        # Train and evaluate each model with minor hyperparameter tuning to get an idea of what
+        # models work well
         # for this particular dataset / problem.
         results = {}
         best_models = {}
@@ -210,7 +221,8 @@ class MiniML:
 
             if model_name != 'Linear Regression':
                 # Train model with cross-validation, varying hyperparameters via grid search.
-                grid_search = grid_search_cv(model, param_grid, cv=5, scoring='neg_mean_squared_error')
+                grid_search = grid_search_cv(model, param_grid, cv=5,
+                                             scoring='neg_mean_squared_error')
                 grid_search.fit(x_train, y_train)
 
                 # Get the best model version from grid search.
@@ -230,18 +242,21 @@ class MiniML:
         print(f"\n\n: : : {target_column_name} : : : \n\nStage 1 - General model search:\n")
         sorted_model_performances = sorted(results.items(), key=lambda x: x[1]['Test MSE'])
         for model_name, metrics in sorted_model_performances:
-            print(f'Test MSE = {metrics["Test MSE"]:.4f}, Test R² = {metrics["Test R²"]:.4f} - {model_name}')
+            print(f'Test MSE = {metrics["Test MSE"]:.4f}, '
+                  f'Test R² = {metrics["Test R²"]:.4f} - {model_name}')
 
         # Select the top 3 performing models.
-        top_three_models = [(model_name, best_models[model_name]) for model_name, _ in sorted_model_performances[:3]]
+        top_three_models = [(model_name, best_models[model_name])
+                            for model_name, _ in sorted_model_performances[:3]]
 
         return top_three_models
 
-    def _stage_2_model_training(self, top_three_models, input_dataset: DataFrame, target_column_name: str,
-                                ratio: float):
+    def _stage_2_model_training(self, top_three_models, input_dataset: DataFrame,
+                                target_column_name: str, ratio: float):
         """
         Optimise hyperparameters of top three models.
-        Why: To find out which models perform the best prior to spending large compute on hyperparameter optimisation.
+        Why: To find out which models perform the best prior to spending large compute on
+        hyperparameter optimisation.
 
         Parameters
         ----------
@@ -252,7 +267,8 @@ class MiniML:
 
         Returns
         -------
-        top_model : Model with the lowest Test MSE score after completing training with hyperparameter optimisation.
+        top_model : Model with the lowest Test MSE score after completing training with h
+        yperparameter optimisation.
         """
 
         # Load relevant libraries, if not already cached.
@@ -319,11 +335,12 @@ class MiniML:
 
         return best_model
 
-    def _continue_training_model(self, input_dataset: DataFrame, input_column_names: list, target_column_name: str,
-                                 train_test_ratio: float) -> None:
+    def _continue_training_model(self, input_dataset: DataFrame, input_column_names: list,
+                                 target_column_name: str,train_test_ratio: float) -> None:
         """
         Continue training a particular model (if possible), with automated model identification.
-        Why: To avoid losing progress from prior training runs where possible such that less total compute is used.
+        Why: To avoid losing progress from prior training runs where possible such that less total
+        compute is used.
 
         Parameters
         ----------
@@ -362,7 +379,8 @@ class MiniML:
             model.partial_fit(x_train, y_train)
             retraining_or_optimising = "continued training"
         else:
-            # Perform hyperparameter optimization again if partial_fit is not available (aka retrain).
+            # Perform hyperparameter optimization again if partial_fit is not available
+            # (aka retrain).
             model, test_mse, test_r2 = self._optimise_model(
                 model, input_dataset, input_column_names, target_column_name, train_test_ratio)
             retraining_or_optimising = "retraining with hyperparameter optimisation"
@@ -399,7 +417,7 @@ class MiniML:
         Returns
         -------
         best_model_version : The most performant model after hyperparameter optimisation.
-        test_mse : Mean Squared Error of the optimised model when evaluated against unseen test data.
+        test_mse : Mean Squared Error of the optimised model when evaluated with unseen test data.
         test_r2 : R² score of the optimised model when evaluated against unseen test data.
         """
 
@@ -410,13 +428,16 @@ class MiniML:
         randomised_search_cv = self._import_and_cache('RandomizedSearchCV')
 
         # Split the dataset into feature and target columns for single-objective model training.
-        targets, features = self._find_model_targets_and_features(input_dataset, input_column_names, target_column_name)
+        targets, features = self._find_model_targets_and_features(input_dataset, input_column_names,
+                                                                  target_column_name)
 
-        # Split the data into training and testing sets to allow for accurate future model performance evaluation.
-        x_train, x_test, y_train, y_test = train_test_split(features, targets, test_size=1 - ratio, random_state=42)
+        # Split the data into training and testing sets to allow for accurate future model perf..
+        x_train, x_test, y_train, y_test = train_test_split(features, targets,
+                                                            test_size=1 - ratio, random_state=42)
 
         # Define the model's name for accessing in param grids.
-        model_name = type(model).__name__.replace("Regressor", "").replace("SVR", "Support Vector Machine")
+        model_name = type(model).__name__.replace("Regressor", "").replace("SVR",
+                                                                           "Support Vector Machine")
 
         # Load model types and some of their hyperparameters for initial processing.
         _, comprehensive_param_grids = self._load_parameter_grids()
@@ -452,8 +473,10 @@ class MiniML:
     @staticmethod
     def _import_and_cache(module_name: str):
         """
-        Import a module or function if it's not already in the global scope for more performant function calls.
-        Why: Dynamic library loading helps perf., while caching avoids python memory assignment issues with high usage.
+        Import a module or function if it's not already in the global scope for more performant
+        function calls.
+        Why: Dynamic library loading helps perf., while caching avoids python memory assignment
+        issues with high usage.
 
          Parameters
         ----------
@@ -514,7 +537,7 @@ class MiniML:
         Returns
         -------
         shallow_param_grids : Model types, alongside a few of their hyperparameters.
-        comprehensive_param_grids : Models types, alongside a more comprehensive list of their hyperparameters.
+        comprehensive_param_grids : Models types, with a comprehensive list of their HyperParams.
         """
 
         # Define models and hyperparameters for quick initial / general testing.
@@ -576,7 +599,8 @@ class MiniML:
     @staticmethod
     def _find_and_load_model(target_column_name: str):
         """
-        Find and load the model for the specified target name, checking all subdirectories on script's execution path.
+        Find and load the model for the specified target name, checking all subdirectories on
+        script's execution path.
         Why: Allows for quick finding of models without the hassle of specifying a path.
 
         Parameters
@@ -596,7 +620,8 @@ class MiniML:
             model_path = f"./model_{target_column_name}.pkl"
         else:
             # Recursively search for the model in all subdirectories.
-            # This shouldn't take too long so long as the script execution folder isn't a clusterfuck of folders...
+            # This shouldn't take too long so long as the script execution folder isn't a
+            # clusterfuck of folders...
             for root, _, files in os.walk("."):
                 if f"model_{target_column_name}.pkl" in files:
                     model_path = os.path.join(root, f"model_{target_column_name}.pkl")
@@ -606,14 +631,18 @@ class MiniML:
         if model_path:
             model = joblib.load(model_path)
         else:
-            # Make directory such that when user is alerted to model missing, a prepared path for where to put it exists
-            # for them to throw the model into if they find it.
+            # Make directory such that when user is alerted to model missing, a prepared path for
+            # where to put it exists for them to throw the model into if they find it.
             os.makedirs("./models/", exist_ok=True)
-            error_message = (f"ModelSearchError:\nModel file for target ‘{target_column_name}’ not found locally."
-                             f"\nThis function checks all folders within the folder it executes from to find the model."
+            error_message = (f"ModelSearchError:\nModel file for target ‘{target_column_name}’ "
+                             f"not found locally."
+                             f"\nThis function checks all folders within the folder it executes "
+                             f"from to find the model."
                              f"\nThe function was executed from the folder: {os.getcwd()}"
-                             f"\nThus, ensure the ‘model_{target_column_name}.pkl’ is located on the the above path."
-                             f"\nIdeally, place it inside the /models/ folder found at {os.getcwd()} for quick access.")
+                             f"\nThus, ensure the ‘model_{target_column_name}.pkl’ is located on "
+                             f"the the above path."
+                             f"\nIdeally, place it inside the /models/ folder found at"
+                             f" {os.getcwd()} for quick access.")
             raise FileNotFoundError(error_message)
 
         return model
@@ -622,7 +651,8 @@ class MiniML:
     def _find_model_targets_and_features(dataset: DataFrame, input_column_names: list,
                                          target_column_name: str) -> tuple[DataFrame, DataFrame]:
         """
-        Find and load the model for the specified target name, checking all subdirectories on script's execution path.
+        Find and load the model for the specified target name, checking all subdirectories on
+        script's execution path.
         Why: Allows for quick finding of models without the hassle of specifying a path.
 
         Parameters
@@ -637,7 +667,8 @@ class MiniML:
         features : A DataFrame of training features, and nothing else.
         """
 
-        # Ensure dataset contains only relevant columns to avoid errors from unexpected columns being present.
+        # Ensure dataset contains only relevant columns to avoid errors from unexpected columns
+        # being present.
         relevant_columns = input_column_names + [target_column_name]
         dataset = dataset[relevant_columns]
 
