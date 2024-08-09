@@ -13,10 +13,10 @@ LONG_DESCRIPTION = 'A set of packages with eye-wateringly minimalistic user inte
 
 # Setting up
 setup(
-    name="vidstream",
+    name="flatworm",
     version=VERSION,
-    author="NeuralNine (Florian Dedov)",
-    author_email="<mail@neuralnine.com>",
+    author="Eryk Krusinski",
+    author_email="<eryk@krus.co.uk>",
     description=DESCRIPTION,
     long_description_content_type="text/markdown",
     long_description=long_description,
