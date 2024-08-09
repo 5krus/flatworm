@@ -313,7 +313,7 @@ class MiniML:
                     n_jobs=-1,
                     random_state=42,
                     verbose=0
-                )
+                    )
                 random_search.fit(x_train, y_train)
 
                 # Get the best model version from random search.
@@ -455,7 +455,7 @@ class MiniML:
             n_jobs=-1,
             random_state=42,
             verbose=0
-        )
+            )
         random_search.fit(x_train, y_train)
 
         # Get the best model from the random search.
@@ -544,55 +544,55 @@ class MiniML:
         shallow_param_grids = {
             'Linear Regression': {
                 # No hyperparameters exist for linear regression.
-            },
+                },
             'K-Nearest Neighbors': {
                 'n_neighbors': [3, 5, 7]
-            },
+                },
             'Support Vector Machine': {
                 'C': [0.1, 1, 10],
                 'kernel': ['linear', 'rbf']
-            },
+                },
             'Decision Tree': {
                 'max_depth': [None, 10, 20]
-            },
+                },
             'RandomForest': {
                 'n_estimators': [50, 100, 150],
                 'max_depth': [None, 10, 20]
+                }
             }
-        }
 
         # Define a large hyperparameter space for optimization.
         comprehensive_param_grids = {
             'Linear Regression': {
                 # Linear regression is just linear regression so there is nothing to tune but adding
                 # for consistency.
-            },
+                },
             'RandomForest': {
                 'n_estimators': randint(50, 500),
                 'max_depth': [None] + list(range(10, 51, 5)),
                 'min_samples_split': randint(2, 11),
                 'min_samples_leaf': randint(1, 5),
                 'max_features': ['sqrt', 'log2', None]
-            },
+                },
             'Decision Tree': {
                 'max_depth': [None] + list(range(10, 51, 5)),
                 'min_samples_split': randint(2, 11),
                 'min_samples_leaf': randint(1, 5),
                 'max_features': ['sqrt', 'log2', None]
-            },
+                },
             'K-Nearest Neighbors': {
                 'n_neighbors': randint(1, 20),
                 'weights': ['uniform', 'distance'],
                 'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
                 'leaf_size': randint(20, 50)
-            },
+                },
             'Support Vector Machine': {
                 'C': uniform(0.1, 100),
                 'kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
                 'gamma': ['scale', 'auto'] + list(arange(0.001, 0.1, 0.001)),
                 'degree': randint(2, 6)
+                }
             }
-        }
 
         return shallow_param_grids, comprehensive_param_grids
 
