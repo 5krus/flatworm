@@ -11,7 +11,7 @@ from numpy import ndarray, arange
 from scipy.stats import randint, uniform
 
 
-class ML:
+class MiniML:
     """
     Minimalistic toolset for machine-learning training and prediction.
     Why: Used for quick development, testing and usage of models.
