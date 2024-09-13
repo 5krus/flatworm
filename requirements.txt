@@ -1,0 +1,5 @@
+GitPython
+watchdog
+tk
+keyring
+schedule
