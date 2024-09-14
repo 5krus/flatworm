@@ -38,7 +38,7 @@ def monitor_directory(path, git_manager):
         # Run indefinitely.
         while True:
             # Sleep for a short time to reduce CPU usage.
-            time.sleep(1)
+            time.sleep(30)
 
             # If a commit is scheduled, commit and push the changes.
             if git_manager.schedule_commit:
