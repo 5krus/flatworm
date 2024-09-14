@@ -9,17 +9,6 @@ import os
 import logging
 import time
 
-if __name__ == "__main__":
-    """
-    Standard Initialisation.
-    """
-
-    configure_logging()
-
-    # Start Flatworm and log startup information.
-    print(f"Flatworm started at {time.strftime('%Y-%m-%d %H:%M:%S')}.")
-    main()
-
 def main():
     """
     Load configuration settings for repository and relevant auto-save branch such that files will be
@@ -85,3 +74,14 @@ def configure_logging():
             logging.StreamHandler()  # Log to the console
         ]
     )
+
+if __name__ == "__main__": 
+    """
+    Standard Initialisation.
+    """
+
+    configure_logging()
+
+    # Start Flatworm and log startup information.
+    print(f"Flatworm started at {time.strftime('%Y-%m-%d %H:%M:%S')}.")
+    main()
