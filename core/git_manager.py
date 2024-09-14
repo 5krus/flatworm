@@ -25,4 +25,4 @@ class git_manager:
             origin.push(self.branch)
             logging.info("Changes pushed successfully.")
         except Exception as e:
-            logging.error(f"Error in commit/push: {e}")
+            logging.error(f"\nError in commit/push:\n{e}")
