@@ -38,7 +38,12 @@ class git_manager:
             if self.exclude_patterns:
                 for pattern in self.exclude_patterns:
                     if pattern.strip():  # Check for non-empty patterns
-                        self.repo.git.rm('-r', '--cached', pattern)
+                        # Check if there are files matching the pattern in the index
+                        matching_files = self.repo.git.ls_files(pattern).splitlines()
+                        if matching_files:  # Only attempt to remove if there are matches
+                            self.repo.git.rm('-r', '--cached', pattern)
+                        else:
+                            logging.info(f"No files matching pattern '{pattern}' are tracked by git.")
 
             commit_message = f"Auto-commit on {time.strftime('%Y-%m-%d %H:%M:%S')}"
             self.repo.index.commit(commit_message)

@@ -1,1 +1,8 @@
-{"repo_path": "/Users/erykkrusinski/Desktop/ek/flatworm", "branch": "dev", "exclude_patterns": [""]}
+{
+    "repo_path": "/Users/erykkrusinski/Desktop/ek/flatworm",
+    "branch": "dev",
+    "exclude_patterns": [
+        "*.log",
+        "*.tmp"
+    ]
+}
