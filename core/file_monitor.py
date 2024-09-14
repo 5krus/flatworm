@@ -22,7 +22,7 @@ class ChangeHandler(FileSystemEventHandler):
         self.git_manager.schedule_commit = True
 
 # Function to monitor a directory for changes. 
-def monitor_directory(path, git_manager):
+def monitor_directory(path, git_manager): 
     # Create an event handler and pass the git_manager instance.
     event_handler = ChangeHandler(git_manager)
 

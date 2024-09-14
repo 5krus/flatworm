@@ -82,45 +82,51 @@ class git_manager:
 
         Parameters
         ----------
-        None : As the branch and repo are already known, this function requires no further inputs.
+        None
 
         Returns
         -------
-        None : Commits are made to remote repository; there is nothing to return.
+        None
         """
 
         try:
-            # Save current branch name to be able to return to it after auto-commting.
+            # Save current branch name to be able to return to it after auto-committing.
             current_branch = self.repo.active_branch.name
 
             # Check for uncommitted changes.
             if self.repo.is_dirty(untracked_files=True):
                 print("Uncommitted changes detected.")
 
-                print("test 1")
-
                 # Stage all changes to store and later commit them.
                 self.repo.git.add(A=True)
 
-                print("test 2")
-
-                # Create a temporary commit on the current branch such that it can be returned to
-                # later after auto-commiting to provided personal branch.
+                # Create a temporary commit on the current branch.
                 temp_commit = self.repo.index.commit("Temporary commit for auto-save.")
-
-                print("test 3")
 
                 # Switch to the provided auto-save branch to make changes to it.
                 self.repo.git.checkout(self.branch)
 
-                print("test 4")
+                # Cherry-pick the temporary commit onto the provided auto-save branch.
+                try:
+                    self.repo.git.cherry_pick(temp_commit.hexsha)
+                except Exception as cherry_pick_error:
+                    error_message = str(cherry_pick_error)
+                    if "The previous cherry-pick is now empty" in error_message:
+                        # Cherry-pick resulted in an empty commit; skip it.
+                        print("Cherry-pick resulted in an empty commit. Skipping.")
+                        self.repo.git.cherry_pick('--skip')
+                    else:
+                        # Abort the cherry-pick if there was an error.
+                        print(f"Cherry-pick failed: {cherry_pick_error}")
+                        self.repo.git.cherry_pick('--abort')
+                        # Switch back to the original branch.
+                        self.repo.git.checkout(current_branch)
+                        # Reset the temporary commit.
+                        self.repo.git.reset('HEAD~1')
+                        print("Restored uncommitted changes on the original branch after cherry-pick failure.")
+                        return  # Exit the method to avoid further errors.
 
-                # Cherry-pick the temporary commit onto provided auto-save branch.
-                self.repo.git.cherry_pick(temp_commit.hexsha)
-
-                print("test 5")
-
-                # Exclude specific file patterns (e.g. "*.log"), if any.
+                # Exclude specific file patterns (e.g., "*.log"), if any.
                 if self.exclude_patterns:
                     for pattern in self.exclude_patterns:
                         if pattern.strip():
@@ -130,19 +136,15 @@ class git_manager:
                             else:
                                 print(f"No files matching pattern '{pattern}' are tracked.")
 
-                print("test 6")
-
                 # Commit the changes onto the provided auto-save branch.
                 commit_message = f"Auto-commit on {time.strftime('%Y-%m-%d %H:%M:%S')}."
                 self.repo.index.commit(commit_message)
 
-                print("test 7")
-
                 # Push to remote.
                 origin = self.repo.remote(name='origin')
                 self.repo.git.push('--set-upstream', origin.name, self.branch)
-                print(f"Auto-commited changes to {self.branch} at " +
-                             f"{time.strftime('%Y-%m-%d %H:%M:%S')}.")
+                print(f"Auto-committed changes to {self.branch} at " +
+                      f"{time.strftime('%Y-%m-%d %H:%M:%S')}.")
 
                 # Switch back to the original branch to restore its prior state.
                 self.repo.git.checkout(current_branch)
