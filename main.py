@@ -49,7 +49,7 @@ def main():
     # Load config or prompt for user to set config, to be able to push to correct repository and
     # branch set later.
     config = load_config()
-    while not config:
+    while not config: 
         open_config_window(config) 
         config = load_config() 
 
