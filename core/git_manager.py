@@ -163,7 +163,7 @@ class git_manager:
                 # Reset the temporary commit to restore uncommitted changes.
                 self.repo.git.reset('HEAD~1')
                 logging.info("Restored uncommitted changes on the original branch.")
-                logging.info(f"## Changes found, committed and pushed.")
+                logging.info(f"## Changes found, committed, and pushed.")
 
         except Exception as e:
             logging.error(f"\nError in commit/push:\n{e}")
