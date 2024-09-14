@@ -14,6 +14,8 @@ if __name__ == "__main__":
     Standard Initialisation.
     """
 
+    configure_logging()
+
     # Start Flatworm and log startup information.
     print(f"Flatworm started at {time.strftime('%Y-%m-%d %H:%M:%S')}.")
     main()
