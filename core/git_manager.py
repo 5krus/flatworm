@@ -93,8 +93,6 @@ class git_manager:
             # Save current branch name to be able to return to it after auto-commting.
             current_branch = self.repo.active_branch.name
 
-            print("Got here")
-
             # Check for uncommitted changes.
             if self.repo.is_dirty(untracked_files=True):
                 print("Uncommitted changes detected.")
