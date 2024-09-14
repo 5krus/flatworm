@@ -129,7 +129,8 @@ class git_manager:
                         self.repo.git.checkout(current_branch)
                         # Reset the temporary commit.
                         self.repo.git.reset('HEAD~1')
-                        logging.info("Restored uncommitted changes on the original branch after cherry-pick failure.")
+                        logging.info("Restored uncommitted changes on the original branch " +
+                                     "after cherry-pick failure.")
                         return  # Exit the method to avoid further errors.
 
                 # Exclude specific file patterns (e.g., "*.log"), if any.
