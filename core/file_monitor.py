@@ -46,7 +46,6 @@ def monitor_directory(path, git_manager):
 
                 # Reset the flag after committing.
                 git_manager.schedule_commit = False
-                logging.info("Changes found, committed and pushed.")
 
     except KeyboardInterrupt:
         # Stop the observer if a keyboard interrupt is received.
