@@ -13,7 +13,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'auto_git = main:main',
+            'auto_git = main:main', 
         ],
     },
     package_data={
