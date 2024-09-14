@@ -151,7 +151,7 @@ class git_manager:
                 origin = self.repo.remote(name='origin')
                 try:
                     self.repo.git.push('--set-upstream', origin.name, self.branch)
-                    logging.info(f"Auto-committed changes to {self.branch}.")
+                    logging.info(f"## Auto-committed changes to {self.branch}.")
                 except Exception as push_error:
                     logging.error(f"Error pushing to remote: {push_error}")
                     # Handle push errors if necessary.
