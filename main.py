@@ -9,28 +9,14 @@ import os
 import logging
 import time
 
-def load_config():
+if __name__ == "__main__":
     """
-    Load configuration settings for repository and relevant auto-save branch such that files will be
-    auto-commited to the correct part of the user codebase ( / repository ).
-
-    Parameters
-    ----------
-    None : This function reads from a hard-coded file path, so no inputs are necessary.
-
-    Returns
-    -------
-    JSON : This function returns the obtained config file details, if they are found.
-    None : This function returns nothing if the config file is not found.
+    Standard Initialisation.
     """
 
-    # Obtain config details from file, after checking if file exists to avoid unnecessary errors.
-    config_path = 'config/config.json'
-    if os.path.exists(config_path):
-        with open(config_path, 'r') as config_file:
-            return json.load(config_file)
-    else:
-        return {}
+    # Start Flatworm and log startup information.
+    print(f"Flatworm started at {time.strftime('%Y-%m-%d %H:%M:%S')}.")
+    main()
 
 def main():
     """
@@ -64,11 +50,38 @@ def main():
     # Start directory monitoring to find changes.
     monitor_directory(config['repo_path'], git_manager)
 
-if __name__ == "__main__":
+def load_config():
     """
-    Standard Initialisation.
+    Load configuration settings for repository and relevant auto-save branch such that files will be
+    auto-commited to the correct part of the user codebase ( / repository ).
+
+    Parameters
+    ----------
+    None : This function reads from a hard-coded file path, so no inputs are necessary.
+
+    Returns
+    -------
+    JSON : This function returns the obtained config file details, if they are found.
+    None : This function returns nothing if the config file is not found.
     """
 
-    # Start Flatworm and log startup information.
-    print(f"Flatworm started at {time.strftime('%Y-%m-%d %H:%M:%S')}.")
-    main()
+    # Obtain config details from file, after checking if file exists to avoid unnecessary errors.
+    config_path = 'config/config.json'
+    if os.path.exists(config_path):
+        with open(config_path, 'r') as config_file:
+            return json.load(config_file)
+    else:
+        return {}
+
+
+
+    def configure_logging():
+        # Configure the logging system
+        logging.basicConfig(
+            level=logging.INFO,  # Set the log level
+            format='%(asctime)s - %(levelname)s - %(message)s',  # Log format
+            handlers=[
+                logging.FileHandler('flatworm.log'),  # Log to a file
+                logging.StreamHandler()  # Log to the console
+            ]
+        )
