@@ -50,7 +50,7 @@ def main():
     # branch set later.
     config = load_config()
     while not config:
-        open_config_window(config)
+        open_config_window(config) 
         config = load_config() 
 
     # Initialize git_manager with provided config, to be able to push to correct repository and
