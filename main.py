@@ -28,7 +28,7 @@ def main():
         config['repo_path'],
         config['branch'],
         config['exclude_patterns']
-    )
+    ) 
 
     # Start directory monitoring to find changes.
     monitor_directory(config['repo_path'], git_manager)
