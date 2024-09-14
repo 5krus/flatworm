@@ -158,7 +158,7 @@ class git_manager:
                 except Exception as push_error:
                     logging.error(f"Error pushing to remote: {push_error}")
                     # Handle push errors if necessary.
-                    # You might want to pull again or abort.
+                    # You might want to pull again or abort. 
 
                 # Switch back to the original branch to restore its prior state.
                 self.repo.git.checkout(current_branch)
