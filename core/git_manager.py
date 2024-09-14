@@ -2,7 +2,7 @@ from git import Repo
 import time
 import logging
 
-class GitManager:
+class git_manager:
     def __init__(self, repo_path, branch, exclude_patterns):
         self.repo_path = repo_path
         self.branch = branch

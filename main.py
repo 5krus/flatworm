@@ -1,8 +1,11 @@
-import json
-import os
-from core.git_manager import GitManager  # Correctly import GitManager
+# Internal imports.
+from core.git_manager import git_manager as gm
 from core.file_monitor import monitor_directory
 from gui.config_window import open_config_window
+
+# External imports.
+import json
+import os
 import logging
 
 def load_config():
@@ -14,22 +17,22 @@ def load_config():
         return {}
 
 def main():
-    # Load or prompt for configuration
+    # Load config or prompt for user to set config, to be able to push to correct repo.
     config = load_config()
-    if not config:
+    while not config:
         open_config_window(config)
         config = load_config()
 
-    # Initialize GitManager with the config
-    git_manager = GitManager(
+    # Initialize git_manager with provided config, to be able to push to correct repo.
+    git_manager = gm(
         config['repo_path'],
         config['branch'],
         config['exclude_patterns']
     )
 
-    # Start directory monitoring
+    # Start directory monitoring to find changes.
     monitor_directory(config['repo_path'], git_manager)
 
 if __name__ == "__main__":
-    logging.info("Auto Git started.")
+    logging.info("Flatworm started.")
     main()
