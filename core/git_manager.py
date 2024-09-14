@@ -40,7 +40,7 @@ class git_manager:
             if self.branch not in self.repo.heads:
 
                 # Create the branch and switching to it for auto-commit to proceed.
-                print(f"Branch '{self.branch}' does not exist locally...\n" +
+                logging.info(f"Branch '{self.branch}' does not exist locally...\n" +
                              f"Creating it at {time.strftime('%Y-%m-%d %H:%M:%S')}.")
                 self.repo.git.checkout('-b', self.branch)
 
@@ -50,8 +50,7 @@ class git_manager:
                 self.repo.git.checkout(self.branch)
 
             # Log successful switch to specified auto-commit branch for future debugging.
-            print(f"Switched to '{self.branch}' branch at " +
-                         f"{time.strftime('%Y-%m-%d %H:%M:%S')}.")
+            logging.info(f"Switched to '{self.branch}' branch.")
 
         # A branch can exist locally while not existing remotely, so it is useful to ensure that it
         # exists on the remote as well. Thus, this check ensures that it does.
@@ -60,12 +59,12 @@ class git_manager:
         if self.branch not in remote_branches:
 
             # Push the branch to the remote to ensure local and remote environments are compatible.
-            print(f"Branch '{self.branch}' does not exist on the remote...\n" +
+            logging.info(f"Branch '{self.branch}' does not exist on the remote...\n" +
                          f"Pushing it at {time.strftime('%Y-%m-%d %H:%M:%S')}.")
             origin.push(self.branch)
 
         else:
-            print(f"Branch '{self.branch}' exists on the remote.")
+            logging.info(f"Branch '{self.branch}' exists on the remote.")
 
     def commit_and_push(self):
         """
