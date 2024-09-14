@@ -40,8 +40,7 @@ class git_manager:
             if self.branch not in self.repo.heads:
 
                 # Create the branch and switching to it for auto-commit to proceed.
-                logging.info(f"Branch '{self.branch}' does not exist locally...\n" +
-                             f"Creating it at {time.strftime('%Y-%m-%d %H:%M:%S')}.")
+                logging.info(f"Branch '{self.branch}' does not exist locally. Creating it.")
                 self.repo.git.checkout('-b', self.branch)
 
             else:
@@ -59,8 +58,7 @@ class git_manager:
         if self.branch not in remote_branches:
 
             # Push the branch to the remote to ensure local and remote environments are compatible.
-            logging.info(f"Branch '{self.branch}' does not exist on the remote...\n" +
-                         f"Pushing it at {time.strftime('%Y-%m-%d %H:%M:%S')}.")
+            logging.info(f"Branch '{self.branch}' does not exist on the remote. Pushing it.")
             origin.push(self.branch)
 
         else:
@@ -152,8 +150,7 @@ class git_manager:
                 origin = self.repo.remote(name='origin')
                 try:
                     self.repo.git.push('--set-upstream', origin.name, self.branch)
-                    logging.info(f"Auto-committed changes to {self.branch} at " +
-                                 f"{time.strftime('%Y-%m-%d %H:%M:%S')}.")
+                    logging.info(f"Auto-committed changes to {self.branch}.")
                 except Exception as push_error:
                     logging.error(f"Error pushing to remote: {push_error}")
                     # Handle push errors if necessary.
