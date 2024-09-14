@@ -3,6 +3,7 @@
     "branch": "dev",
     "exclude_patterns": [
         "*.log",
-        "*.tmp"
+        "*.tmp",
+        "__pycache__/"
     ]
 }
