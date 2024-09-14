@@ -164,8 +164,5 @@ class git_manager:
                 logging.info("Restored uncommitted changes on the original branch.")
                 logging.info(f"\nChanges found, committed and pushed.")
 
-            else:
-                logging.info("No uncommitted changes to commit.")
-
         except Exception as e:
             logging.error(f"\nError in commit/push:\n{e}")
