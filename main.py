@@ -73,15 +73,13 @@ def load_config():
     else:
         return {}
 
-
-
-    def configure_logging():
-        # Configure the logging system
-        logging.basicConfig(
-            level=logging.INFO,  # Set the log level
-            format='%(asctime)s - %(levelname)s - %(message)s',  # Log format
-            handlers=[
-                logging.FileHandler('flatworm.log'),  # Log to a file
-                logging.StreamHandler()  # Log to the console
-            ]
-        )
+def configure_logging():
+    # Configure the logging system
+    logging.basicConfig(
+        level=logging.INFO,  # Set the log level
+        format='%(asctime)s - %(levelname)s - %(message)s',  # Log format
+        handlers=[
+            logging.FileHandler('flatworm.log'),  # Log to a file
+            logging.StreamHandler()  # Log to the console
+        ]
+    )
