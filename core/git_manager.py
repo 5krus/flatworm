@@ -136,7 +136,7 @@ class git_manager:
                             else:
                                 print(f"No files matching pattern '{pattern}' are tracked.")
 
-                # Commit the changes onto the provided auto-save branch.
+                # Commit the changes onto the provided auto-save branch. 
                 commit_message = f"Auto-commit on {time.strftime('%Y-%m-%d %H:%M:%S')}."
                 self.repo.index.commit(commit_message)
 
