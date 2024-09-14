@@ -7,8 +7,24 @@ from gui.config_window import open_config_window
 import json
 import os
 import logging
+import time
 
 def load_config():
+    """
+    Load configuration settings for repository and relevant auto-save branch such that files will be
+    auto-commited to the correct part of the user codebase ( / repository ).
+
+    Parameters
+    ----------
+    None : This function reads from a hard-coded file path, so no inputs are necessary.
+
+    Returns
+    -------
+    JSON : This function returns the obtained config file details, if they are found.
+    None : This function returns nothing if the config file is not found.
+    """
+
+    # Obtain config details from file, after checking if file exists to avoid unnecessary errors.
     config_path = 'config/config.json'
     if os.path.exists(config_path):
         with open(config_path, 'r') as config_file:
@@ -17,13 +33,28 @@ def load_config():
         return {}
 
 def main():
-    # Load config or prompt for user to set config, to be able to push to correct repo.
+    """
+    Load configuration settings for repository and relevant auto-save branch such that files will be
+    auto-commited to the correct part of the user codebase ( / repository ).
+
+    Parameters
+    ----------
+    None : This function reads from a hard-coded file path, so no inputs are necessary.
+
+    Returns
+    -------
+    None : This function saves the trained model to file, so no return is necessary.
+    """
+
+    # Load config or prompt for user to set config, to be able to push to correct repository and
+    # branch set later.
     config = load_config()
     while not config:
         open_config_window(config)
         config = load_config()
 
-    # Initialize git_manager with provided config, to be able to push to correct repo.
+    # Initialize git_manager with provided config, to be able to push to correct repository and
+    # branch set later.
     git_manager = gm(
         config['repo_path'],
         config['branch'],
@@ -34,5 +65,10 @@ def main():
     monitor_directory(config['repo_path'], git_manager)
 
 if __name__ == "__main__":
-    logging.info("Flatworm started.")
+    """
+    Standard Initialisation.
+    """
+
+    # Start Flatworm and log startup information.
+    print(f"Flatworm started at {time.strftime('%Y-%m-%d %H:%M:%S')}.")
     main()
