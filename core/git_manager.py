@@ -97,18 +97,28 @@ class git_manager:
             if self.repo.is_dirty(untracked_files=True):
                 print("Uncommitted changes detected.")
 
+                print("test 1")
+
                 # Stage all changes to store and later commit them.
                 self.repo.git.add(A=True)
+
+                print("test 2")
 
                 # Create a temporary commit on the current branch such that it can be returned to
                 # later after auto-commiting to provided personal branch.
                 temp_commit = self.repo.index.commit("Temporary commit for auto-save.")
 
+                print("test 3")
+
                 # Switch to the provided auto-save branch to make changes to it.
                 self.repo.git.checkout(self.branch)
 
+                print("test 4")
+
                 # Cherry-pick the temporary commit onto provided auto-save branch.
                 self.repo.git.cherry_pick(temp_commit.hexsha)
+
+                print("test 5")
 
                 # Exclude specific file patterns (e.g. "*.log"), if any.
                 if self.exclude_patterns:
@@ -120,9 +130,13 @@ class git_manager:
                             else:
                                 print(f"No files matching pattern '{pattern}' are tracked.")
 
+                print("test 6")
+
                 # Commit the changes onto the provided auto-save branch.
                 commit_message = f"Auto-commit on {time.strftime('%Y-%m-%d %H:%M:%S')}."
                 self.repo.index.commit(commit_message)
+
+                print("test 7")
 
                 # Push to remote.
                 origin = self.repo.remote(name='origin')
